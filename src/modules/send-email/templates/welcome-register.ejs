@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,700;1,100;1,200;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+
+        body {
+            background: #f5f5f5;
+        }
+
+        .container {
+            font-family: Poppins;
+            max-width: 500px;
+            margin: auto;
+        }
+
+
+        .header {
+            font-weight: 700;
+            color: #171735;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.4rem;
+            background: #F0B90B;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .body {
+            background: white;
+            border: 1px solid #eee;
+            padding: 15px;
+            border-radius: 0 0 10px 10px;
+        }
+
+        p {
+            font-size: .9rem
+        }
+
+        .body h1 {
+            font-size: 1.5rem;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .block-confirm-code {
+            background: #eee;
+            text-align: center;
+            padding: 10px;
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 10px;
+        }
+
+
+        .footer {
+            text-align: center;
+        }
+
+        .footer hr {
+            border-color: #eee;
+            background: #eee;
+        }
+
+        .text-muted {
+            color: #aaa;
+            font-weight: normal;
+        }
+
+        .footer-copy p {
+            font-size: .7rem !important ;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        KriptoKu
+    </div>
+    <div class="body">
+        <h1>Halo, <%= user.name %> </h1>
+
+        <p>
+            Selamat datang di komunitas trader internasional.
+        </p>
+
+    </div>
+    <div class="footer">
+
+        <p>
+            Punya pertanyaan? <a href="https://kriptoku.net/contact">Hubungi kami! </a>
+        </p>
+
+        <p>
+            Layanan Pelanggan tersedia selama 24/7
+        </p>
+
+        <hr>
+
+        <div class="text-muted footer-copy">
+
+            <p>Pastikan bahwa alamat surel Anda tidak jatuh ke tangan orang lain.
+                Kami memegang teguh Kebijakan Privasi</p>
+
+            <p>© <%= new Date().getFullYear() %> KriptoKu</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
