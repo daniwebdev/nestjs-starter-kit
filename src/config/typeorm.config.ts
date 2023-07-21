@@ -1,9 +1,9 @@
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { join } from "path";
-export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
+export const defaultTypeOrmConfig: TypeOrmModuleAsyncOptions = {
     useFactory: () => {
         return {
-            name: 'main',
+            name: 'default',
             type: "postgres",
             database: process.env.DB_NAME,
             username: process.env.DB_USER,
