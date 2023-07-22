@@ -27,12 +27,19 @@ paths:
               items:
                 nullable: false
             example:
-              identity:
-              password:
-              provider:
-                name:
-                id:
-                token:
+              identity: john@doe.com
+              password: password
+              device:
+                id: '123123'
+                name: 'Xiaomi Note 11 Pro 5G'
+                os: Android 12
+                coordinate: 
+                  long: '123123'
+                  lat: '123123'
+              # provider:
+              #   name:
+              #   id:
+              #   token:
 
       responses:
         200:
