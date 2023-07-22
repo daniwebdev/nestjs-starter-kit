@@ -22,10 +22,6 @@ paths:
       requestBody:
         content:
           application/json:
-            schema:
-              type: object
-              items:
-                nullable: false
             example:
               identity: john@doe.com
               password: password
@@ -36,11 +32,12 @@ paths:
                 coordinate: 
                   long: '123123'
                   lat: '123123'
-              # provider:
-              #   name:
-              #   id:
-              #   token:
-
+                provider:
+                  name:
+                  id:
+                  token:
+            schema:
+              $ref: '#/components/schemas/LoginRequestBody'
       responses:
         200:
          description: ""
@@ -64,25 +61,30 @@ components:
       properties:
         identity:
           type: string
-          description: "Parameter ini bisa diisi dengan email/phone/username"
+          example: john@doe.com
         password:
           type: string
-          description: ""
         provider:
           type: object
+          description: |
+            Paramter ini hanya dikirim padasaat melakukan autentikasi dengan 
+            provider pihak ke 3 seperti google, facebook, twitter
           properties:
             name:
               type: string
-              enum:
-               - google
-               - twitter
-               - facebook
             id:
               type: string
-              description: "user id from provider"
             token:
               type: string
-              description: ""
+        device:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            os:
+              type: string
 
     User:
       type: object
