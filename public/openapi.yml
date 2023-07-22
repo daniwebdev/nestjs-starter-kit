@@ -1,0 +1,73 @@
+openapi: 3.0.0
+info:
+  title: INTERVEST.IO - API SPECS
+  version: 0.0.1
+paths:
+  /auth/register:
+    post:
+      tags:
+        - "Authentication"
+      responses:
+        200:
+         description: ""
+  /auth/login:
+    post:
+      tags:
+        - "Authentication"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              items:
+                nullable: false
+            example:
+              identity:
+              password:
+              provider:
+                name:
+                id:
+                token:
+
+      responses:
+        200:
+         description: ""
+security:
+  - ApiKey: []
+components:
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: "x-api-key"
+  schemas:
+    LoginRequestBody:
+      type: object
+      properties:
+        identity:
+          type: string
+          description: "Parameter ini bisa diisi dengan email/phone/username"
+        password:
+          type: string
+          description: ""
+        provider:
+          type: object
+          properties:
+            name:
+              type: string
+              enum:
+               - google
+               - twitter
+               - facebook
+            id:
+              type: string
+              description: "user id from provider"
+            token:
+              type: string
+              description: ""
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer

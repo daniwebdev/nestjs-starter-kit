@@ -1,17 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-import { User } from 'src/app/user/user.entity';
 
 @Injectable()
-export class SendEmailService {
+export class SendEmailService<T> {
     constructor(
         private readonly mailerService: MailerService
     ) {}
 
-    async welcomeRegisterEmail(email: string, userData?: User): Promise<void> {
+    async welcomeRegisterEmail(email: string, userData?: T): Promise<void> {
         this.mailerService.sendMail({
             to: email, // list of receivers
-            // from: 'noreply@maxrich.us', // sender address
             subject: 'Welcome to trader community', // Subject line
             template: 'welcome-register',
             context: {
