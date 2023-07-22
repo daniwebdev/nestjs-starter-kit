@@ -24,50 +24,85 @@ export class User {
   @Column()
   phone: string;
 
-  @Column()
+  @Column({
+    name: 'phone_verified_at'
+  })
   phoneVerifiedAt: Date;
 
   @Column()
   email: string;
 
-  @Column()
+  @Column({
+    name: 'email_verified_at'
+  })
   emailVerifiedAt: Date;
 
   @Column()
   password: string;
 
-  @Column()
+  @Column({
+    name: 'telegram_account'
+  })
   telegramAccount: string;
 
-  @Column()
+  @Column({
+    name: 'telegram_chat_id'
+  })
   telegramChatId: string;
 
-  @Column()
+  @Column({
+    name: 'telegram_verified_at'
+  })
   telegramVerifiedAt: Date;
 
-  @Column()
+  @Column({
+    name: 'member_id'
+
+  })
   memberId: number;
 
-  @Column()
+  @Column({
+    name: 'member_package_id'
+  })
   memberPackageId: number;
 
-  @Column()
+  @Column({
+    name: 'member_subscription_id'
+  })
   memberSubscriptionId: number;
 
-  @Column()
+  @Column({
+    name: 'member_status'
+  })
   memberStatus: string;
 
   @Column('json')
   coordinate: coordinateType;
 
-  @Column()
-  currentLogin: Date;
+  @Column({
+    type: 'json',
+    name: 'current_login'
+  })
+  currentLogin: currentLoginType;
 
-  @Column()
-  lastLogin: Date;
+  @Column({
+    type: 'json',
+    name: 'current_login'
+  })
+  lastLogin: currentLoginType;
 }
 
 type coordinateType = {
   latitude: number;
   longitude: number;
+}
+
+
+type currentLoginType = {
+  "ip": string,
+  "app": string,
+  "device": string,
+  "device_id": string,
+  "timestamp": number,
+  "coordinate": coordinateType,
 }
