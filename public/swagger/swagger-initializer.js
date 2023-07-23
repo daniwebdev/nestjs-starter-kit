@@ -6,6 +6,24 @@ window.onload = function() {
     url: "../openapi.yml",
     dom_id: '#swagger-ui',
     deepLinking: true,
+    // requestInterceptor: function (req) {
+    //   var key = localStorage.getItem("authKey");
+
+    //   if (key && key.trim() !== "") {
+    //     console.log(req.headers);
+    //       req.headers.Authorization = 'Bearer ' + key;
+    //       console.log('Authorized from authKey');
+    //   }
+
+    //   var apiKey = localStorage.getItem("apiKey");
+    //   if (apiKey && apiKey.trim() !== "") {
+    //       console.log(req.headers);
+    //       req.headers['X-API-KEY'] = apiKey;
+    //       console.log('X-API-KEY from apiKey');
+    //   }
+
+    //   return req;
+    // },
     presets: [
       SwaggerUIBundle.presets.apis,
       SwaggerUIStandalonePreset

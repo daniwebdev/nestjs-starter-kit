@@ -2,11 +2,19 @@ openapi: 3.0.0
 info:
   title: INTERVEST.IO - API SPECS
   version: 0.0.1
+  description: |
+    Intervest.io adalah platform social investing sebagi tempat berkumpul trader & investor pasar modal sekaligus sebagi alat
+    untuk membantu dalam menganalisa market.
 servers:
   - url: 'http://localhost:10001'
     description: "localhost"
   - url: 'https://intervest.onbox.dev'
     description: "development"
+tags:
+  - name: "Authentication"
+    description: ""
+  - name: "Account"
+    description: "Management user account"
 paths:
   /auth/register:
     post:
@@ -15,10 +23,41 @@ paths:
       responses:
         200:
          description: ""
+  /auth/provider/google:
+    post:
+      tags:
+       - "Authentication"
+      description: ""
+      requestBody:
+        content:
+          application/json:
+            example:
+              device:
+                id: '123123'
+                name: 'Xiaomi Note 11 Pro 5G'
+                os: Android 12
+                coordinate: 
+                  long: '123123'
+                  lat: '123123'
+              provider:
+                id:
+                token:
+      responses:
+        200:
+         description: ""
+         content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/AuthSuccessResponse'
   /auth/login:
     post:
       tags:
         - "Authentication"
+      description: |
+        Untuk parameter `provider` pada Request body hanya dikirim jika login menggunakan pihak ke 3 seperti
+        google, facebook atau twitter.
+
+        dan saat login dengan provider, maka identity dan password boleh di kosongkan atau tidak di kirim.
       requestBody:
         content:
           application/json:
@@ -28,23 +67,88 @@ paths:
               device:
                 id: '123123'
                 name: 'Xiaomi Note 11 Pro 5G'
+                brand: 'Xiaomi'
                 os: Android 12
                 coordinate: 
                   long: '123123'
                   lat: '123123'
-                provider:
-                  name:
-                  id:
-                  token:
             schema:
               $ref: '#/components/schemas/LoginRequestBody'
       responses:
         200:
          description: ""
+         content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/AuthSuccessResponse'
+  /auth/refresh:
+    post:
+      tags:
+        - "Authentication"
+      description: ""
+      responses:
+        200:
+          description: "ok"
+  /auth/logout:
+    post:
+      tags:
+        - "Authentication"
+      description: ""
+      responses:
+        200:
+          description: "ok"
+  /user:
+    post:
+      description: "Update Data User"
+      security:
+        - ApiKey: []
+        - AuthToken: []
+      tags:
+        - "Account"
+      requestBody:
+        description: ""
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserDataRequestBody'
+            example:
+              name: "John Doe"
+              address: "Bogor, Indonesia"
+              photo: "gs://user/photo/john-doe.jpg"
+      responses:
+        200:
+          description: "ok"
+    get:
+      security:
+        - ApiKey: []
+        - AuthToken: []
+      tags:
+        - "Account"
+      description: "Menampilkan detail informasi user"
+      responses:
+        200:
+          description: "ok"
+  /user/username-availability:
+    get:
+      description: "Cek ketersediaan username"
+      summary: "Cek ketersediaan username"
+      security:
+        - ApiKey: []
+        - AuthToken: []
+      tags:
+        - "Account"
+      parameters:
+        - name: username
+          in: query
+          schema:
+            type: string
+      responses:
+        200:
+          description: "Ok"
 security:
   - ApiKey: []
   - AuthToken: []
-components:
+components:      
   securitySchemes:
     ApiKey:
       type: apiKey
@@ -72,6 +176,8 @@ components:
           properties:
             name:
               type: string
+              enum:
+                - ["google", "facebook"]
             id:
               type: string
             token:
@@ -85,9 +191,85 @@ components:
               type: string
             os:
               type: string
-
-    User:
+    AuthSuccessResponse:
       type: object
       properties:
-        id:
-          type: integer
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            token: 
+              type: string
+              description: "Authentication token (JWT) untuk di gunakan di endpoint terautentikasi."
+            user:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int64
+                uuid:
+                  type: string
+                  format: uuid
+                username:
+                  type: string
+                name:
+                  type: string
+                avatar:
+                  type: string
+                  nullable: true
+                phone:
+                  type: string
+                phoneVerifiedAt:
+                  type: string
+                  format: date-time
+                  nullable: true
+                email:
+                  type: string
+                  format: email
+                emailVerifiedAt:
+                  type: string
+                  format: date-time
+                  nullable: true
+                password:
+                  type: string
+                telegramAccount:
+                  type: string
+                  nullable: true
+                telegramChatId:
+                  type: string
+                  nullable: true
+                telegramVerifiedAt:
+                  type: string
+                  format: date-time
+                  nullable: true
+                memberId:
+                  type: integer
+                  format: int64
+                memberPackageId:
+                  type: integer
+                  format: int64
+                memberSubscriptionId:
+                  type: integer
+                  format: int64
+                memberStatus:
+                  type: string
+                  nullable: true
+                coordinate:
+                  type: string
+                  example: '{"lat":1.798017,"lng":131.509684}'
+                currentLogin:
+                  type: object
+                lastLogin:
+                  type: object
+    UpdateUserDataRequestBody:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        photo:
+          type: string
