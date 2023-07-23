@@ -27,7 +27,8 @@ export class User {
   @Column({
     name: 'phone_verified_at'
   })
-  phoneVerifiedAt: Date;
+  phone_verified_at: Date;
+  //phoneVerifiedAt: Date;
 
   @Column()
   email: string;
@@ -35,7 +36,8 @@ export class User {
   @Column({
     name: 'email_verified_at'
   })
-  emailVerifiedAt: Date;
+  email_verified_at: Date;
+  //emailVerifiedAt: Date;
 
   @Column()
   password: string;
@@ -43,38 +45,44 @@ export class User {
   @Column({
     name: 'telegram_account'
   })
-  telegramAccount: string;
+  telegram_account: string;
+  //telegramAccount: string;
 
   @Column({
     name: 'telegram_chat_id'
   })
-  telegramChatId: string;
+  telegram_chat_id: string;
+  //telegramChatId: string;
 
   @Column({
     name: 'telegram_verified_at'
   })
-  telegramVerifiedAt: Date;
+  telegram_verified_at: Date;
+  //telegramVerifiedAt: Date;
 
   @Column({
     name: 'member_id'
-
   })
-  memberId: number;
+  member_id: number;
+  //memberId: number;
 
   @Column({
     name: 'member_package_id'
   })
-  memberPackageId: number;
+  member_package_id: number;
+  //memberPackageId: number;
 
   @Column({
     name: 'member_subscription_id'
   })
-  memberSubscriptionId: number;
+  member_subscription_id: number;
+  //memberSubscriptionId: number;
 
   @Column({
     name: 'member_status'
   })
-  memberStatus: string;
+  member_status: string;
+  //memberStatus: string;
 
   @Column('json')
   coordinate: coordinateType;
@@ -83,13 +91,13 @@ export class User {
     type: 'json',
     name: 'current_login'
   })
-  currentLogin: currentLoginType;
+  currentLogin: CurrentLoginType;
 
   @Column({
     type: 'json',
     name: 'current_login'
   })
-  lastLogin: currentLoginType;
+  lastLogin: CurrentLoginType;
 }
 
 type coordinateType = {
@@ -98,11 +106,11 @@ type coordinateType = {
 }
 
 
-type currentLoginType = {
-  "ip": string,
-  "app": string,
-  "device": string,
-  "device_id": string,
-  "timestamp": number,
-  "coordinate": coordinateType,
+type CurrentLoginType = {
+  ip: string,
+  app: string,
+  device: string,
+  device_id: string,
+  timestamp: number,
+  coordinate: coordinateType,
 }

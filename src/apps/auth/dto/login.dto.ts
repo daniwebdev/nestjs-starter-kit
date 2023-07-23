@@ -1,22 +1,16 @@
+import { IsNotEmpty } from "class-validator";
+import { DeviceDTO } from "./device.dto";
 export class LoginDTO {
+    @IsNotEmpty()
     identity: string;
+
+    @IsNotEmpty()
     password: string;
-    provider: ProviderLogin;
-    device: Device;
+
+    device: DeviceDTO;
 }
 
-export class ProviderLogin {
-    name: string;
-    id: string;
-    token: string
-}
 
-export class Device {
-    uniqueId: string;
-    name: string;
-    os: string;
-    platform: 'WEB'|'MOBILE'|'DESKTOP'
-}
 
 // "identity": null,
 // "password": null,
