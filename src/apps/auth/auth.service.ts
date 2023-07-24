@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcrypt';
 import { Request } from 'express';
 import { UserDevice } from 'src/entities/user-device.entity';
+import { DeviceDTO } from './dto/device.dto';
 
 @Injectable()
 export class AuthService {
@@ -35,7 +36,7 @@ export class AuthService {
           throw new UnauthorizedException('Invalid credentials');
         }
 
-        const tokens = await this.getTokens(user);
+        const tokens = await this.getTokens(user, data.device);
 
         delete user.password;
 
@@ -74,7 +75,7 @@ export class AuthService {
             // Save the user in the database
             const newUser = await manager.save(user);
 
-            const tokens = await this.getTokens(newUser);
+            const tokens = await this.getTokens(newUser, device);
 
             // Create and save the related user device using the userDevicesRepository
             const newUserDevice = manager.create(UserDevice, {
@@ -97,6 +98,7 @@ export class AuthService {
 
             await manager.save(newUserDevice);
 
+
             const getUser = await this.getUser({
                 id: newUser.id,
             }, manager)
@@ -113,18 +115,20 @@ export class AuthService {
 
       }
 
-    async getTokens(user: User) {
+    async getTokens(user: User, device: DeviceDTO) {
         return {
             access_token: await this.jwtService.signAsync({
                 username: user.name,
+                deviceId: device.id,
                 id: user.id,
             }, {
                 secret: this.configService.get("JWT_SECRET"),
                 expiresIn: 15,
             }),
             refresh_token: await this.jwtService.signAsync({
+                username: user.name,
                 id: user.id,
-                deviceId: 1
+                deviceId: device.id
             }, {
                 secret: this.configService.get("JWT_SECRET_REFRESH"),
                 expiresIn: 60 * 60 * 24 * 7,
