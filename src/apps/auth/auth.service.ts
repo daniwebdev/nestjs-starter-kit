@@ -20,12 +20,16 @@ export class AuthService {
         private readonly configService: ConfigService,
     ) {}
 
+    async logout(userAuth: UserInAuth) {
+        // 
+    }
+
     async login(data: LoginDTO) {
         const user = await this.getUser([
             {username: data.identity,},
             {email: data.identity,},
             {phone: data.identity,},
-        ]);
+        ], null, true);
 
         if (!user || !this.checkPassword(data.password, user.password)) {
           throw new UnauthorizedException('Invalid credentials');
@@ -56,11 +60,10 @@ export class AuthService {
         // Hash the password before saving it to the database
         const hashedPassword = await this.makeHash(password);
     
-
         return this.usersRepository.manager.transaction(async (manager: EntityManager) => {
 
             // Create a new user entity
-            const newUser = manager.create(User, {
+            const user = manager.create(User, {
                 name,
                 username,
                 email,
@@ -69,7 +72,7 @@ export class AuthService {
             });
 
             // Save the user in the database
-            await manager.save(newUser);
+            const newUser = await manager.save(user);
 
             const tokens = await this.getTokens(newUser);
 
@@ -94,14 +97,15 @@ export class AuthService {
 
             await manager.save(newUserDevice);
 
-            delete newUser.password;
+            const getUser = await this.getUser({
+                id: newUser.id,
+            }, manager)
 
             // Return any additional information you may want to provide after successful registration
             // For example, you can return the newly created user entity with sensitive information (like password) removed.
-            const { password: _, ...registeredUser } = newUser;
             return {
                 tokens: tokens,
-                user: newUser
+                user: getUser
             };
         }).catch(error => {
             throw error;
@@ -116,13 +120,13 @@ export class AuthService {
                 id: user.id,
             }, {
                 secret: this.configService.get("JWT_SECRET"),
-                expiresIn: 60*15,
+                expiresIn: 15,
             }),
             refresh_token: await this.jwtService.signAsync({
                 id: user.id,
                 deviceId: 1
             }, {
-                secret: this.configService.get("JWT_SECRET"),
+                secret: this.configService.get("JWT_SECRET_REFRESH"),
                 expiresIn: 60 * 60 * 24 * 7,
             }),
         }
@@ -132,7 +136,7 @@ export class AuthService {
         return hash(data, 10);
     }
 
-    private async checkPassword(inputPassword: string, hashPassword) {
+    private async checkPassword(inputPassword: string, hashPassword:string) {
         const passwordHash = hashPassword.replace(/^\$2y(.+)$/i, '$2a$1');
         if(!await compare(inputPassword, passwordHash)) {
             /* password is not valid when compared with password in database */
@@ -142,29 +146,38 @@ export class AuthService {
         return true;
     }
 
-    private getUser(condition: FindOptionsWhere<User> | FindOptionsWhere<User>[]) {
+    private getUser(condition: FindOptionsWhere<User> | FindOptionsWhere<User>[], manager?: EntityManager, withPassword?: boolean) {
+        const _select = {
+            id: withPassword ?? false,
+            uuid: true,
+            username: true,
+            name: true,
+            avatar: true,
+            phone: true,
+            phone_verified_at: true,
+            email: true,
+            email_verified_at: true,
+            password: withPassword ?? false,
+            telegram_account: false,
+            telegram_chat_id: false,
+            telegram_verified_at: false,
+            member_id: false,
+            member_package_id: false,
+            member_subscription_id: false,
+            member_status: false,
+        }
+
+        if(manager) {
+            return manager.findOne(User, {
+                where: condition,
+                select: _select
+            })
+        }
+
         return this.usersRepository.findOne({
             where: condition,
-            select: {
-                id: false,
-                uuid: true,
-                username: true,
-                name: true,
-                avatar: true,
-                phone: true,
-                phone_verified_at: true,
-                email: true,
-                email_verified_at: true,
-                password: true,
-                telegram_account: true,
-                telegram_chat_id: true,
-                telegram_verified_at: true,
-                member_id: true,
-                member_package_id: true,
-                member_subscription_id: true,
-                member_status: true,
-            }
-        });
+            select: _select,
+        })
     }
 
     async updateHashToken(deviceId: string, tokens: any) {

@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
+import { UseJwtGuard } from 'src/filters/jwt.guard';
 import { Response } from 'src/utils/response.utils';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
@@ -13,6 +14,7 @@ export class AuthController {
     ) {}
 
     @Post('/login')
+    @HttpCode(HttpStatus.OK)
     async login(
         @Req() req: Request,
         @Body() data: LoginDTO
@@ -26,6 +28,7 @@ export class AuthController {
     }
 
     @Post('/register')
+    @HttpCode(HttpStatus.CREATED)
     async register(
         @Req() req: Request,
         @Body() data: RegisterDTO,
@@ -36,5 +39,20 @@ export class AuthController {
             message: "Your account has been created.",
             data: registerResponse,
         });
+    }
+
+    @Post('/logout')
+    @HttpCode(HttpStatus.OK)
+    @UseJwtGuard()
+    async logout(
+        @Req() req: Request,
+        @Body() data: RegisterDTO,
+    ) {
+        // const registerResponse = await this.authService.logout();
+        console.log(req.user)
+        // return Response.success({
+        //     message: "Your account has been created.",
+        //     data: registerResponse,
+        // });
     }
 }
