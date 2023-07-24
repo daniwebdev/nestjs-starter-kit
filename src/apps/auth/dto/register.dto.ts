@@ -20,4 +20,6 @@ export class RegisterDTO {
     coordinate: CoordinateDTO;
 
     device: DeviceDTO;
+
+    refferal_code: string;
 }

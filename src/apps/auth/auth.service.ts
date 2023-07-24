@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
-import { FindOptionsWhere, Repository } from 'typeorm'
+import { EntityManager, FindOptionsWhere, Repository } from 'typeorm'
 import { ConfigService } from '@nestjs/config';
 import { compare, hash } from 'bcrypt';
 import { Request } from 'express';
@@ -21,7 +21,6 @@ export class AuthService {
     ) {}
 
     async login(data: LoginDTO) {
-        //
         const user = await this.getUser([
             {username: data.identity,},
             {email: data.identity,},
@@ -33,7 +32,9 @@ export class AuthService {
         }
 
         const tokens = await this.getTokens(user);
-        
+
+        delete user.password;
+
         return { 
             tokens,
             user
@@ -53,46 +54,59 @@ export class AuthService {
         }
     
         // Hash the password before saving it to the database
-        const hashedPassword = await this.hashPassword(password);
+        const hashedPassword = await this.makeHash(password);
     
-        // Create a new user entity
-        const newUser = this.usersRepository.create({
-          name,
-          username,
-          email,
-          phone,
-          password: hashedPassword,
-        });
-    
-        // Save the user in the database
-        await this.usersRepository.save(newUser);
 
-        const tokens = await this.getTokens(newUser);
+        return this.usersRepository.manager.transaction(async (manager: EntityManager) => {
 
-        const newUserDevice = this.userDevicesRepository.create({
-            uniqueId: device.id,
-            name: device.name,
-            brand: device.brand,
-            os: device.os,
-            platform: req.header('x-app-platform') ?? 'unknown',
-            accessToken: tokens.access_token,
-            refreshToken: tokens.refresh_token,
-            status: 'allowed',
-            lastLogin: {
-               ip: req.ip,
-               app: req.header('x-app-platform'),
-               app_version: req.header('x-app-version'),
-               coordinate,
-            //    app_version: req.header('x-app-version'),
-            }
+            // Create a new user entity
+            const newUser = manager.create(User, {
+                name,
+                username,
+                email,
+                phone,
+                password: hashedPassword,
+            });
+
+            // Save the user in the database
+            await manager.save(newUser);
+
+            const tokens = await this.getTokens(newUser);
+
+            // Create and save the related user device using the userDevicesRepository
+            const newUserDevice = manager.create(UserDevice, {
+                user_id: newUser.id, // Associate with the newly created user
+                unique_id: device.id,
+                name: device.name,
+                brand: device.brand,
+                os: device.os,
+                platform: req.header('x-app-platform') ?? 'unknown',
+                access_token: await this.makeHash(tokens.access_token),
+                refresh_token: await this.makeHash(tokens.refresh_token),
+                status: 'allowed',
+                last_login: {
+                    ip: req.ip,
+                    app_version: req.header('x-app-version'),
+                    timestamp: new Date().getTime(),
+                    coordinate,
+                },
+            });
+
+            await manager.save(newUserDevice);
+
+            delete newUser.password;
+
+            // Return any additional information you may want to provide after successful registration
+            // For example, you can return the newly created user entity with sensitive information (like password) removed.
+            const { password: _, ...registeredUser } = newUser;
+            return {
+                tokens: tokens,
+                user: newUser
+            };
+        }).catch(error => {
+            throw error;
         })
 
-        await this.userDevicesRepository.save(newUserDevice);
-    
-        // Return any additional information you may want to provide after successful registration
-        // For example, you can return the newly created user entity with sensitive information (like password) removed.
-        const { password: _, ...registeredUser } = newUser;
-        return {tokens,...registeredUser};
       }
 
     async getTokens(user: User) {
@@ -114,7 +128,7 @@ export class AuthService {
         }
     }
 
-    private hashPassword(data: string) {
+    private makeHash(data: string) {
         return hash(data, 10);
     }
 
@@ -130,7 +144,36 @@ export class AuthService {
 
     private getUser(condition: FindOptionsWhere<User> | FindOptionsWhere<User>[]) {
         return this.usersRepository.findOne({
-            where: condition
+            where: condition,
+            select: {
+                id: false,
+                uuid: true,
+                username: true,
+                name: true,
+                avatar: true,
+                phone: true,
+                phone_verified_at: true,
+                email: true,
+                email_verified_at: true,
+                password: true,
+                telegram_account: true,
+                telegram_chat_id: true,
+                telegram_verified_at: true,
+                member_id: true,
+                member_package_id: true,
+                member_subscription_id: true,
+                member_status: true,
+            }
         });
+    }
+
+    async updateHashToken(deviceId: string, tokens: any) {
+
+        this.userDevicesRepository.update({
+            unique_id: deviceId,
+        }, {
+            access_token: await this.makeHash(tokens['access_token']),
+            refresh_token: await this.makeHash(tokens['refresh_token']),
+        })
     }
 }

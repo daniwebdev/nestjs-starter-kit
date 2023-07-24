@@ -1,4 +1,5 @@
 import { IsNotEmpty } from "class-validator";
+import { CoordinateDTO } from "./coordinate.dto";
 import { DeviceDTO } from "./device.dto";
 export class LoginDTO {
     @IsNotEmpty()
@@ -8,6 +9,8 @@ export class LoginDTO {
     password: string;
 
     device: DeviceDTO;
+
+    coordinate: CoordinateDTO;
 }
 
 

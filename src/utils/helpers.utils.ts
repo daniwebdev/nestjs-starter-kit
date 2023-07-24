@@ -8,8 +8,7 @@ export const strRandom = (myLength) => {
         (v, k) => chars[Math.floor(Math.random() * chars.length)]
     );
 
-    const randomString = randomArray.join("");
-    return randomString;
+    return randomArray.join("");
 };
 
 
@@ -36,11 +35,12 @@ export const groupBy: any = (array: any[], groupby: string) => {
  * example:
  * gs: => for google storage
  * s3: => s3 aws
+ * cl: => cloudinary
  * @return string
  */
 export function file_url(path: string) {
 
-    if(path == null) return 'https://files.kriptoku.com/statics/avatar-placeholder.png';
+    if(path == null) return 'https://files.intervest.io/statics/avatar-placeholder.png';
 
     const path_prefix = process.env.FILES_PUBLIC_URL;
     const pattern     = /\bhttps?:\/\/\S+/;
@@ -50,8 +50,7 @@ export function file_url(path: string) {
 
     if(googleSign != null) return path;
     
-    let myString = path;
-        path = myString.replace(/gcs:|s3:/g, '');
+    const myString = path.replace(/gcs:|s3:/g, '');
 
     return `${path_prefix}${path}`;
 }
@@ -82,7 +81,7 @@ export const jsoncompressed = (data: any) => {
 export const jsondecompressed: any | null = (data: any) => {
     if(data == null) return null;
 
-    let decompressed = inflateSync(Buffer.from(data, 'base64')).toString();
+    const decompressed = inflateSync(Buffer.from(data, 'base64')).toString();
     return isJson(decompressed) ? JSON.parse(decompressed) : decompressed;
 }
 
@@ -102,7 +101,7 @@ export const formatString = (str: string, data: any) => {
 export function decryptString(encryptedText:any, key:string) {
     console.log(key);
     const md5 = (data: any) => createHash('md5').update(data).digest("hex")
-    var iv = Buffer.alloc(16, 0);
+    const iv = Buffer.alloc(16, 0);
     
     const decipher = createDecipheriv('aes-256-cbc', md5(key), iv);
     

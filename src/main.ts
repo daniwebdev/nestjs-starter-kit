@@ -3,6 +3,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { ApiKeyGuard } from './apps/app.guard';
 import { AppModule } from './apps/app.module';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 const APP_PORT = 3000;
 
@@ -15,6 +16,7 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, 'views'));
 
   app.useGlobalGuards(new ApiKeyGuard());
+  app.useGlobalFilters(new HttpExceptionFilter())
 
   app.setViewEngine('ejs');
 

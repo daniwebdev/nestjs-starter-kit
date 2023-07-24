@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { Response } from 'src/utils/response.utils';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
+import { RegisterDTO } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -11,7 +12,7 @@ export class AuthController {
         private authService: AuthService,
     ) {}
 
-    @Post('login')
+    @Post('/login')
     async login(
         @Req() req: Request,
         @Body() data: LoginDTO
@@ -24,8 +25,16 @@ export class AuthController {
         });
     }
 
-    @Post('register')
-    register() {
-        //
+    @Post('/register')
+    async register(
+        @Req() req: Request,
+        @Body() data: RegisterDTO,
+    ) {
+        const registerResponse = await this.authService.register(data, req);
+
+        return Response.success({
+            message: "Your account has been created.",
+            data: registerResponse,
+        });
     }
 }

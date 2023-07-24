@@ -1,4 +1,5 @@
 import { CurrentLoginType } from "src/apps/auth/types";
+import { strRandom } from "src/utils";
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({
@@ -8,11 +9,13 @@ export class UserDevice {
     @PrimaryColumn()
     id: string;
 
-    @Column({name: 'user_id'})
-    userId: string;
+    @Column()
+    user_id: number;
+    // userId: string;
 
     @Column({name: 'unique_id'})
-    uniqueId: string;
+    unique_id:string;
+    // uniqueId: string;
 
     @Column()
     name: string;
@@ -27,19 +30,24 @@ export class UserDevice {
     platform: string;
 
     @Column('json', {name: 'last_login'})
-    lastLogin: CurrentLoginType;
+    last_login:CurrentLoginType;
+    // lastLogin: CurrentLoginType;
 
     @Column('json', {name: 'current_login'})
-    currentLogin: CurrentLoginType;
+    current_login:CurrentLoginType;
+    // currentLogin: CurrentLoginType;
 
     @Column({name: 'access_token'})
-    accessToken: string;
+    access_token:string;
+    // accessToken: string;
 
     @Column({name: 'refresh_token'})
-    refreshToken: string;
+    refresh_token:string;
+    // refreshToken: string;
 
     @Column({name: 'fcm_token'})
-    fcmToken: string;
+    fcm_token:string;
+    // fcmToken: string;
 
     @Column()
     preference: string;
@@ -48,6 +56,7 @@ export class UserDevice {
     status: string;
 
     @Column({name: 'status_reason'})
-    statusReason: string;
+    status_reason:string;
+    // statusReason: string;
 
 }

@@ -15,11 +15,20 @@ tags:
     description: ""
   - name: "Account"
     description: "Management user account"
+
 paths:
   /auth/register:
     post:
       tags:
         - "Authentication"
+      parameters:
+        - $ref: "#/components/parameters/AppVersionParameter"
+        - $ref: "#/components/parameters/AppPlatformParameter"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestBody'
       responses:
         200:
          description: ""
@@ -51,13 +60,13 @@ paths:
               $ref: '#/components/schemas/AuthSuccessResponse'
   /auth/login:
     post:
+      parameters:
+        - $ref: "#/components/parameters/AppVersionParameter"
+        - $ref: "#/components/parameters/AppPlatformParameter"
       tags:
         - "Authentication"
       description: |
-        Untuk parameter `provider` pada Request body hanya dikirim jika login menggunakan pihak ke 3 seperti
-        google, facebook atau twitter.
-
-        dan saat login dengan provider, maka identity dan password boleh di kosongkan atau tidak di kirim.
+        `identity` bisa di isi dengan username, email atau phone.
       requestBody:
         content:
           application/json:
@@ -69,13 +78,13 @@ paths:
                 name: 'Xiaomi Note 11 Pro 5G'
                 brand: 'Xiaomi'
                 os: Android 12
-                coordinate: 
-                  long: '123123'
-                  lat: '123123'
+              coordinate: 
+                longitude: -6.4013011623988305
+                latitude: 106.85269506615691
             schema:
               $ref: '#/components/schemas/LoginRequestBody'
       responses:
-        200:
+        201:
          description: ""
          content:
            application/json:
@@ -148,7 +157,22 @@ paths:
 security:
   - ApiKey: []
   - AuthToken: []
-components:      
+components:
+  parameters:
+    AppVersionParameter:
+      name: 'X-APP-VERSION'
+      in: header
+      required: true
+      example: "1.0.0"
+      schema:
+        type: string
+    AppPlatformParameter:
+      name: 'X-APP-PLATFORM'
+      in: header
+      required: true
+      example: "Android"
+      schema:
+        type: string
   securitySchemes:
     ApiKey:
       type: apiKey
@@ -166,28 +190,38 @@ components:
         identity:
           type: string
           example: john@doe.com
+          description: You can put email/username/phone
         password:
           type: string
-        provider:
+        # provider:
+        #   type: object
+        #   description: |
+        #     Paramter ini hanya dikirim padasaat melakukan autentikasi dengan 
+        #     provider pihak ke 3 seperti google, facebook, twitter
+        #   properties:
+        #     name:
+        #       type: string
+        #       enum:
+        #         - ["google", "facebook"]
+        #     id:
+        #       type: string
+        #     token:
+        #       type: string
+        coordinate:
           type: object
-          description: |
-            Paramter ini hanya dikirim padasaat melakukan autentikasi dengan 
-            provider pihak ke 3 seperti google, facebook, twitter
           properties:
-            name:
-              type: string
-              enum:
-                - ["google", "facebook"]
-            id:
-              type: string
-            token:
-              type: string
+            latitude:
+              type: number
+            longitude:
+              type: number
         device:
           type: object
           properties:
             id:
               type: string
             name:
+              type: string
+            brand:
               type: string
             os:
               type: string
@@ -201,15 +235,23 @@ components:
         data:
           type: object
           properties:
-            token: 
-              type: string
+            tokens: 
+              type: object
               description: "Authentication token (JWT) untuk di gunakan di endpoint terautentikasi."
+              properties:
+                access_token:
+                  type: string
+                  format: jwt
+                refresh_token:
+                  type: string
+                  format: jwt
             user:
               type: object
               properties:
                 id:
                   type: integer
                   format: int64
+                  example: 12
                 uuid:
                   type: string
                   format: uuid
@@ -257,13 +299,6 @@ components:
                 memberStatus:
                   type: string
                   nullable: true
-                coordinate:
-                  type: string
-                  example: '{"lat":1.798017,"lng":131.509684}'
-                currentLogin:
-                  type: object
-                lastLogin:
-                  type: object
     UpdateUserDataRequestBody:
       type: object
       properties:
@@ -273,3 +308,51 @@ components:
           type: string
         photo:
           type: string
+    RegisterRequestBody:
+      type: object
+      properties:
+        username:
+          type: string
+          example: "man.in.the.street"
+        name:
+          type: string
+          description: "Full name"
+          example: "Joe Blow"
+        email:
+          type: string
+          example: "new1@mail.com"
+        password:
+          type: string
+          example: "secret"
+        phone:
+          type: string
+          example: +62857147333
+        refferal_code:
+          type: string
+          example: ""
+        coordinate:
+          type: object
+          properties:
+            latitude:
+              type: number
+            longitude:
+              type: number
+          example:
+            longitude: -6.4013011623988305
+            latitude: 106.85269506615691
+        device:
+          type: object
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+            brand:
+              type: string
+            os:
+              type: string
+          example:
+            id: '123123'
+            name: 'Xiaomi Note 11 Pro 5G'
+            brand: 'Xiaomi'
+            os: Android 12
