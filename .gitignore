@@ -37,3 +37,5 @@ lerna-debug.log*
 
 # Adding for this project
 .env
+
+src/service-account.json
