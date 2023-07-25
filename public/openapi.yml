@@ -1,15 +1,12 @@
 openapi: 3.0.0
 info:
-  title: INTERVEST.IO - API SPECS
+  title: YOUR APP - API SPECS
   version: 0.0.1
   description: |
-    Intervest.io adalah platform social investing sebagi tempat berkumpul trader & investor pasar modal sekaligus sebagi alat
-    untuk membantu dalam menganalisa market.
+    Laboris sunt laborum ad eiusmod et ex irure aliquip laboris qui labore.
 servers:
   - url: 'http://localhost:10001'
     description: "localhost"
-  - url: 'https://intervest.onbox.dev'
-    description: "development"
 tags:
   - name: "Authentication"
     description: ""
