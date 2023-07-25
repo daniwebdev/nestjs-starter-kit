@@ -26,6 +26,14 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Starter Kit
+
+### Feature
+
+- [] Authentication
+- [] JWT Token
+- [] Redis Store
+
 ## Installation
 
 ```bash
