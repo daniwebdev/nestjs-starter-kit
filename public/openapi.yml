@@ -17,6 +17,46 @@ tags:
     description: "Management user account"
 
 paths:
+  /file/upload:
+    post:
+      tags:
+        - File
+      summary: Upload file to server
+      description: Upload file ini akan menghasilkan lokasi file
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - file
+                - type
+                - format
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - temporary
+                    - permanent
+                  default: temporary
+                format:
+                  type: string
+                  enum:
+                    - images
+                    - doc
+                    - other
+                  description: 'FORMAT : images: `jpg, png, jpeg`.  document: `(pdf, doc, xlsx, csv, xls)`. other: selain yang disebutkan tadi'
+                file_group:
+                  type: string
+                  description: 'file group nya, contoh : avatar, kyc, community, dll'
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
   /auth/register:
     post:
       tags:
@@ -158,6 +198,21 @@ security:
   - ApiKey: []
   - AuthToken: []
 components:
+  responses:
+    '401':
+      description: 'This error probobly '
+      content:
+        application/json:
+          example:
+            status: UnAutorization
+            message: Invalid access token
+    '500':
+      description: Internal server errors
+      content:
+        application/json:
+          example:
+            status: error
+            message: This is the reason why
   parameters:
     AppVersionParameter:
       name: 'X-APP-VERSION'

@@ -18,26 +18,47 @@ export class GoogleCloudStorage implements ProviderStorage<Bucket> {
 
     instance(): Bucket {
         if(this._instance == null) {
-            this._instance = new GCS(this.storageOption).bucket('tradeapp-f8e74.appspot.com');
+            this._instance = new GCS(this.storageOption).bucket(this.config.bucketName);
         }
 
         return this._instance;
     }
 
     async put(destination: string, buffer: Buffer, mimetype?: string) {
+        console.log(`${this.config.prefix}/${destination}`)
 
-        const file = this.instance().file(destination);
+        const file = this.instance().file(`${this.config.prefix}/${destination}`);
 
         await file.save(buffer, {
             gzip: true,
-        });
+        })
 
-        return file;
+        console.log("HHH")
+
+        return true;
+
+        // const writeStream = file.createWriteStream({
+        //     gzip: true,
+        //     resumable: false,
+        // });
+
+        // return new Promise((resolve, reject) => {
+        //     writeStream.on('finish', () => {
+        //         console.log('hhhh')
+        //         resolve(true)
+        //     }).on('error', (e) => {
+        //         throw e;
+        //         reject(false)
+        //     })
+        //     .on('pipe', () => {
+        //         console.log('-------')
+        //     })
+        //     .end(buffer)
+        // })
+
     }
 
     async move(origin:string, destination: string) {
-        console.log(`${this.config.prefix}/${origin}`)
-        console.log(`${this.config.prefix}/${destination}`)
 
         await this.instance().file(`${this.config.prefix}/${origin}`).move(`${this.config.prefix}/${destination}`);
 

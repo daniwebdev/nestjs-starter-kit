@@ -6,6 +6,7 @@ import { defaultTypeOrmConfig } from 'src/config/typeorm.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { FileModule } from './file/file.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { AuthModule } from './auth/auth.module';
         }
       }
     }),
-    AuthModule
+    AuthModule,
+    FileModule
   ],
   controllers: [AppController],
   providers: [AppService],
