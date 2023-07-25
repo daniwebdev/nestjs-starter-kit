@@ -6,7 +6,15 @@
     "deleteOutDir": true,
     "watchAssets": true,
     "assets": [
-      "src/service-account.json"
+      {
+        "include": "service-account.json",
+        "watchAssets": true
+      },
+      {
+        "include": "i18n/**/*",
+        "watchAssets": true,
+        "outDir": "dist"
+      }
     ]
   }
 }

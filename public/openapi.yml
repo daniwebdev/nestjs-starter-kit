@@ -103,6 +103,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/AppVersionParameter"
         - $ref: "#/components/parameters/AppPlatformParameter"
+        - $ref: "#/components/parameters/AppLangParameter"
       tags:
         - "Authentication"
       description: |
@@ -226,6 +227,13 @@ components:
       in: header
       required: true
       example: "Android"
+      schema:
+        type: string
+    AppLangParameter:
+      name: 'X-APP-LANG'
+      in: header
+      required: true
+      example: "en"
       schema:
         type: string
   securitySchemes:

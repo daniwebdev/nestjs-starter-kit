@@ -5,6 +5,7 @@ import { Response } from 'src/utils/response.utils';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
+import { I18n, I18nContext } from 'nestjs-i18n';
 
 @Controller('auth')
 export class AuthController {
@@ -16,13 +17,14 @@ export class AuthController {
     @Post('/login')
     @HttpCode(HttpStatus.OK)
     async login(
+        @I18n() i18n: I18nContext,
         @Req() req: Request,
         @Body() data: LoginDTO
     ) {
         const loginResponse = await this.authService.login(data);
 
         return Response.success({
-            message: "Your identity accepted, login successful.",
+            message: i18n.t('response.login.success'),
             data: loginResponse,
         });
     }

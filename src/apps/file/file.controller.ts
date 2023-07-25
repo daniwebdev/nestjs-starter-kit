@@ -1,6 +1,7 @@
 import { Body, Controller, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
+import { UseJwtGuard } from 'src/filters/jwt.guard';
 import { FileService } from './file.service';
 
 @Controller('file')
