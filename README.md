@@ -30,9 +30,10 @@
 
 ### Feature
 
-- [] Authentication
-- [] JWT Token
-- [] Redis Store
+- [x] Authentication
+- [x] JWT Token
+- [x] Redis Store
+- [x] Multi Language
 
 ## Installation
 
