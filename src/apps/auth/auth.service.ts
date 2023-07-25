@@ -10,6 +10,7 @@ import { compare, hash } from 'bcrypt';
 import { Request } from 'express';
 import { UserDevice } from 'src/entities/user-device.entity';
 import { DeviceDTO } from './dto/device.dto';
+import { RedisService } from 'src/modules/redis/redis.service';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,7 @@ export class AuthService {
     constructor(
         @InjectRepository(User) private usersRepository: Repository<User>,
         @InjectRepository(UserDevice) private userDevicesRepository: Repository<UserDevice>,
+        private readonly redisService: RedisService,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
     ) {}
@@ -116,6 +118,9 @@ export class AuthService {
       }
 
     async getTokens(user: User, device: DeviceDTO) {
+        
+        await this.redisService.set(`user-data:${user.id}`, user);
+
         return {
             access_token: await this.jwtService.signAsync({
                 username: user.name,
@@ -123,7 +128,7 @@ export class AuthService {
                 id: user.id,
             }, {
                 secret: this.configService.get("JWT_SECRET"),
-                expiresIn: 15,
+                expiresIn: eval(this.configService.get('JWT_EXP_AT')),
             }),
             refresh_token: await this.jwtService.signAsync({
                 username: user.name,
@@ -131,7 +136,8 @@ export class AuthService {
                 deviceId: device.id
             }, {
                 secret: this.configService.get("JWT_SECRET_REFRESH"),
-                expiresIn: 60 * 60 * 24 * 7,
+                // expiresIn: 60 * 60 * 24 * 7,
+                expiresIn: eval(this.configService.get('JWT_REFRESH_EXP_AT')),
             }),
         }
     }
