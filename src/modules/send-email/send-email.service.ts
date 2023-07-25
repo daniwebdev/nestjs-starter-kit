@@ -10,7 +10,7 @@ export class SendEmailService<T> {
     async welcomeRegisterEmail(email: string, userData?: T): Promise<void> {
         this.mailerService.sendMail({
             to: email, // list of receivers
-            subject: 'Welcome to trader community', // Subject line
+            subject: 'Welcome to', // Subject line
             template: 'welcome-register',
             context: {
                 user: userData
@@ -33,25 +33,6 @@ export class SendEmailService<T> {
                 code,
                 email,
                 name
-            }
-        }).then(success => {
-            // console.log(success);
-        }).catch(error => {
-            console.log(error)
-        }) 
-    }
-
-    async marginCallNotice(email:string, name:string): Promise<void> {
-
-        this.mailerService.sendMail({
-            to: email,
-            subject: "Margin Call Notice..!",
-            template: 'margin-call-notice',
-            context: {
-                user: {
-                    email,
-                    name
-                }
             }
         }).then(success => {
             // console.log(success);
