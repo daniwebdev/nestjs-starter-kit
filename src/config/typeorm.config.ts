@@ -13,22 +13,6 @@ export const defaultTypeOrmConfig: TypeOrmModuleAsyncOptions = {
             entities: [
                 join(__dirname, '..', '**', '*.entity{.ts,.js}')
             ],
-            // extra: {
-            //     idleTimeoutMillis: 4.32e+7,
-            //     connectionTimeoutMillis: 240000,
-            //     keepAlive: true,
-            //     minConnection: 5,
-            //     maxConnection: 20,
-            //     connectionLimit: 10
-            // },
-            // entities: [
-            //     User, 
-            //     Customer, 
-            //     Information,
-            //     Deposit,
-            //     Config,
-            //     PairListed
-            // ],
             synchronize: false,
             poolSize: 10,
             poolErrorHandler: (err) => {
