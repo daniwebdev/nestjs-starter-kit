@@ -1,5 +1,12 @@
 {
     "login": {
         "success": "Login berhasil"
+    },
+    "register": {
+        "success": "Your account has been created."
+    },
+    "logout": {
+        "success": "Logout successful."
     }
+    
 }

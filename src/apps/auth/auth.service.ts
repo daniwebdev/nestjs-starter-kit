@@ -27,7 +27,8 @@ export class AuthService {
 
         try {
             this.userDevicesRepository.update({
-                id: userAuth.id
+                user_id: userAuth.id,
+                unique_id: userAuth.unique_id
             }, {
                 access_token: null,
                 refresh_token: null,
