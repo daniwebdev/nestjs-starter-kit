@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { UseJwtGuard } from 'src/filters/jwt.guard';
 import { Response } from 'src/utils';
@@ -30,5 +30,16 @@ export class UserController {
     ) {
 
         const response = this.userService.updateUserData(data, req.user);
+    }
+
+    @Get('availability')
+    async usernameAvailability(@Query('username') username: string) {
+        //
+
+        const response = await this.userService.checkAvailability(username);
+
+        return Response.success({
+            message: response
+        });
     }
 }

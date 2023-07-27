@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { I18nService } from 'nestjs-i18n';
 import { User } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { UpdateUserDTO } from './update-user.dto';
@@ -10,6 +11,7 @@ export class UserService {
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        private readonly i18n: I18nService,
     ) { }
 
 
@@ -33,9 +35,6 @@ export class UserService {
                 phone_verified_at: true,
                 email: true,
                 email_verified_at: true,
-                // password: true,
-                // updated_at: true,
-                // created_at: true,
             }
         })
 
@@ -49,6 +48,20 @@ export class UserService {
 
         //
         
+    }
+
+    async checkAvailability(username: string) {
+        
+        try {
+            await this.userRepository.findOneByOrFail({
+                username: username
+            });
+
+            throw new HttpException(this.i18n.t("user.availability.usernameIsNotAvailable"), HttpStatus.FORBIDDEN);
+
+        } catch (error) {
+            return this.i18n.t('user.availability.usernameIsAvailable');
+        }
     }
 }
 // 
