@@ -30,7 +30,9 @@ export class AuthService {
     async logout(userAuth: UserInAuth) {
 
         try {
-            this.userDevicesRepository.update({
+            console.log(userAuth.id)
+            console.log(userAuth.deviceUniqueId);
+            await this.userDevicesRepository.update({
                 user_id: userAuth.id,
                 unique_id: userAuth.deviceUniqueId,
             }, {
@@ -59,7 +61,7 @@ export class AuthService {
 
         const token = req.header('authorization').replace('Bearer ', '');
         console.log(device.refresh_token)
-        if(!await this.checkPassword(token, device.refresh_token)) {
+        if(!await this.checkPassword(token, device.refresh_token ?? '')) {
             throw new HttpException(this.i18n.t('auth.refresh.invalid-token'), HttpStatus.BAD_REQUEST);
         }
 
@@ -85,18 +87,6 @@ export class AuthService {
         return {
             tokens
         };
-
-        // await this.userDevicesRepository.update({
-        //     id: device.id,
-        // }, {
-        //     refresh_token: null,
-        //     access_token: null,
-        // })
-
-        // return this.i18n.t('auth.refresh.response-success')
-        // console.log(device);
-
-        // this.checkPassword()
     }
 
     async login(data: LoginDTO,  req: Request) {

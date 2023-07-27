@@ -33,10 +33,10 @@ export class UserDevice {
     @Column('json', {name: 'current_login'})
     current_login:CurrentLoginType;
 
-    @Column({name: 'access_token'})
+    @Column({name: 'access_token', nullable: true})
     access_token:string;
 
-    @Column({name: 'refresh_token'})
+    @Column({name: 'refresh_token', nullable: true})
     refresh_token:string;
 
     @Column({name: 'fcm_token'})
