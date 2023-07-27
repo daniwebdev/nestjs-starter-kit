@@ -15,4 +15,5 @@ import { RedisModule } from 'src/modules/redis/redis.module';
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController]
 })
+
 export class AuthModule {}

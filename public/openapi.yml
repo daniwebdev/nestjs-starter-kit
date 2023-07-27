@@ -130,6 +130,10 @@ paths:
               $ref: '#/components/schemas/AuthSuccessResponse'
   /auth/refresh:
     post:
+      security:
+        - ApiKey: []
+        - RefreshToken: []
+      
       tags:
         - "Authentication"
       description: ""
@@ -240,6 +244,11 @@ components:
       description: "dev: `intervest-sandbox`"
       name: "x-api-key"
     AuthToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+    RefreshToken:
+      description: "Hanya dipakai di `/auth/refresh`"
       type: http
       scheme: bearer
       bearerFormat: JWT    # optional, arbitrary value for documentation purposes

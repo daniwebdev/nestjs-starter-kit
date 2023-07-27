@@ -8,6 +8,6 @@ type UserInAuth = {
     id: number,
     name: string,
     email: string,
-    unique_id: string,
+    deviceUniqueId: string,
     fcm_token?: string,
 }

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
-import { UseJwtGuard } from 'src/filters/jwt.guard';
+import { UseJwtGuard, UseJwtRefreshGuard } from 'src/filters/jwt.guard';
 import { Response } from 'src/utils/response.utils';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
@@ -29,6 +29,22 @@ export class AuthController {
         });
     }
 
+    @UseJwtRefreshGuard()
+    @Post('/refresh')
+    @HttpCode(HttpStatus.OK)
+    async refresh(
+        @I18n() i18n: I18nContext,
+        @Req() req: Request,
+    ) {
+
+        const refreshResponse = await this.authService.refresh(req);
+
+        return Response.success({
+            message: i18n.t('auth.refresh.response-success'),
+            data: refreshResponse,
+        });
+    }
+
     @Post('/register')
     @HttpCode(HttpStatus.CREATED)
     async register(
@@ -36,6 +52,7 @@ export class AuthController {
         @Req() req: Request,
         @Body() data: RegisterDTO,
     ) {
+
         const registerResponse = await this.authService.register(data, req);
 
         return Response.success({

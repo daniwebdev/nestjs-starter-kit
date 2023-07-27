@@ -1,4 +1,4 @@
-import {  HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
@@ -11,13 +11,17 @@ import { Request } from 'express';
 import { UserDevice } from 'src/entities/user-device.entity';
 import { DeviceDTO } from './dto/device.dto';
 import { RedisService } from 'src/modules/redis/redis.service';
+import { I18nService } from 'nestjs-i18n';
 
 @Injectable()
 export class AuthService {
 
     constructor(
-        @InjectRepository(User) private usersRepository: Repository<User>,
-        @InjectRepository(UserDevice) private userDevicesRepository: Repository<UserDevice>,
+        @InjectRepository(User) 
+        private usersRepository: Repository<User>,
+        @InjectRepository(UserDevice) 
+        private userDevicesRepository: Repository<UserDevice>,
+        private readonly i18n: I18nService,
         private readonly redisService: RedisService,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
@@ -28,7 +32,7 @@ export class AuthService {
         try {
             this.userDevicesRepository.update({
                 user_id: userAuth.id,
-                unique_id: userAuth.unique_id
+                unique_id: userAuth.deviceUniqueId,
             }, {
                 access_token: null,
                 refresh_token: null,
@@ -42,6 +46,57 @@ export class AuthService {
         } finally {
             
         }
+    }
+
+    async refresh(req: Request) {
+
+        const deviceUniqueId = req.user.deviceUniqueId;
+
+        const device: UserDevice = await this.userDevicesRepository.findOneBy({
+            user_id: req.user.id,
+            unique_id: deviceUniqueId,
+        });
+
+        const token = req.header('authorization').replace('Bearer ', '');
+        console.log(device.refresh_token)
+        if(!await this.checkPassword(token, device.refresh_token)) {
+            throw new HttpException(this.i18n.t('auth.refresh.invalid-token'), HttpStatus.BAD_REQUEST);
+        }
+
+        const user = await this.usersRepository.findOneBy({
+            id: req.user.id,
+        })
+
+        const deviceDTO = new DeviceDTO();
+        deviceDTO.brand = device.brand;
+        deviceDTO.id = device.unique_id;
+        deviceDTO.name = device.name;
+        deviceDTO.os = device.os;
+
+        const tokens = await this.getTokens(user, deviceDTO);
+
+       await this.userDevicesRepository.update({
+            id: device.id,
+        }, {
+            refresh_token: await this.makeHash(tokens.refresh_token),
+            access_token: await this.makeHash(tokens.access_token),
+        })
+
+        return {
+            tokens
+        };
+
+        // await this.userDevicesRepository.update({
+        //     id: device.id,
+        // }, {
+        //     refresh_token: null,
+        //     access_token: null,
+        // })
+
+        // return this.i18n.t('auth.refresh.response-success')
+        // console.log(device);
+
+        // this.checkPassword()
     }
 
     async login(data: LoginDTO,  req: Request) {
@@ -167,17 +222,19 @@ export class AuthService {
         return {
             access_token: await this.jwtService.signAsync({
                 username: user.name,
-                deviceId: device.id,
+                deviceUniqueId: device.id,
                 id: user.id,
             }, {
+                subject: new Date().getTime().toString() + ' | hi',
                 secret: this.configService.get("JWT_SECRET"),
                 expiresIn: eval(this.configService.get('JWT_EXP_AT')),
             }),
             refresh_token: await this.jwtService.signAsync({
                 username: user.name,
                 id: user.id,
-                deviceId: device.id
+                deviceUniqueId: device.id,
             }, {
+                subject: new Date().getTime().toString() + ' | hi',
                 secret: this.configService.get("JWT_SECRET_REFRESH"),
                 // expiresIn: 60 * 60 * 24 * 7,
                 expiresIn: eval(this.configService.get('JWT_REFRESH_EXP_AT')),
