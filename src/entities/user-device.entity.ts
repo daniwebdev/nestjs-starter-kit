@@ -1,5 +1,4 @@
 import { CurrentLoginType } from "src/apps/auth/types";
-import { strRandom } from "src/utils";
 import { Column, CreateDateColumn, Entity, PrimaryColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity({
@@ -57,5 +56,4 @@ export class UserDevice {
 
     @CreateDateColumn()
     created_at: Date;
-
 }
