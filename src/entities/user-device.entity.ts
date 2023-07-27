@@ -1,21 +1,20 @@
 import { CurrentLoginType } from "src/apps/auth/types";
 import { strRandom } from "src/utils";
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryColumn, Unique, UpdateDateColumn } from "typeorm";
 
 @Entity({
     name: 'user_devices'
 })
+@Unique(['user_id', 'unique_id']) // Add a unique constraint on user_id and unique_id columns
 export class UserDevice {
     @PrimaryColumn()
-    id: string;
+    id: number;
 
     @Column()
     user_id: number;
-    // userId: string;
 
     @Column({name: 'unique_id'})
     unique_id:string;
-    // uniqueId: string;
 
     @Column()
     name: string;
@@ -31,23 +30,18 @@ export class UserDevice {
 
     @Column('json', {name: 'last_login'})
     last_login:CurrentLoginType;
-    // lastLogin: CurrentLoginType;
 
     @Column('json', {name: 'current_login'})
     current_login:CurrentLoginType;
-    // currentLogin: CurrentLoginType;
 
     @Column({name: 'access_token'})
     access_token:string;
-    // accessToken: string;
 
     @Column({name: 'refresh_token'})
     refresh_token:string;
-    // refreshToken: string;
 
     @Column({name: 'fcm_token'})
     fcm_token:string;
-    // fcmToken: string;
 
     @Column()
     preference: string;
@@ -57,6 +51,11 @@ export class UserDevice {
 
     @Column({name: 'status_reason'})
     status_reason:string;
-    // statusReason: string;
+
+    @UpdateDateColumn()
+    updated_at:Date;
+
+    @CreateDateColumn()
+    created_at: Date;
 
 }

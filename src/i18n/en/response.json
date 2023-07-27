@@ -1,5 +1,12 @@
 {
     "login": {
         "success": "Your identity accepted, login successful."
+    },
+    "register": {
+        "success": "Your account has been created."
+    },
+    "logout": {
+        "success": "Logout successful."
     }
+    
 }

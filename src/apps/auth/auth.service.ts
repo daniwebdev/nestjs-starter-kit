@@ -24,10 +24,26 @@ export class AuthService {
     ) {}
 
     async logout(userAuth: UserInAuth) {
-        // 
+
+        try {
+            this.userDevicesRepository.update({
+                id: userAuth.id
+            }, {
+                access_token: null,
+                refresh_token: null,
+            })
+
+            this.redisService.del(`user-data:${userAuth.id}`);
+
+            return true;
+        } catch (error) {
+            return false;
+        } finally {
+            
+        }
     }
 
-    async login(data: LoginDTO) {
+    async login(data: LoginDTO,  req: Request) {
         const user = await this.getUser([
             {username: data.identity,},
             {email: data.identity,},
@@ -39,6 +55,32 @@ export class AuthService {
         }
 
         const tokens = await this.getTokens(user, data.device);
+
+        const userDevice = this.userDevicesRepository.create({
+            user_id: user.id, // Associate with the newly created user
+            unique_id: data.device.id,
+            name: data.device.name,
+            brand: data.device.brand,
+            os: data.device.os,
+            platform: req.header('x-app-platform') ?? 'unknown',
+            access_token: await this.makeHash(tokens.access_token),
+            refresh_token: await this.makeHash(tokens.refresh_token),
+            status: 'allowed',
+            last_login: {
+                ip: req.ip,
+                app_version: req.header('x-app-version'),
+                timestamp: new Date().getTime(),
+                coordinate: data.coordinate,
+            },
+        });
+        try {
+            await this.userDevicesRepository.save(userDevice);
+        } catch (error) {
+            await this.userDevicesRepository.update({
+                user_id: userDevice.user_id,
+                unique_id: userDevice.unique_id,
+            }, userDevice);
+        }
 
         delete user.password;
 

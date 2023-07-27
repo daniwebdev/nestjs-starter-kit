@@ -21,7 +21,7 @@ export class AuthController {
         @Req() req: Request,
         @Body() data: LoginDTO
     ) {
-        const loginResponse = await this.authService.login(data);
+        const loginResponse = await this.authService.login(data, req);
 
         return Response.success({
             message: i18n.t('response.login.success'),
@@ -32,13 +32,14 @@ export class AuthController {
     @Post('/register')
     @HttpCode(HttpStatus.CREATED)
     async register(
+        @I18n() i18n: I18nContext,
         @Req() req: Request,
         @Body() data: RegisterDTO,
     ) {
         const registerResponse = await this.authService.register(data, req);
 
         return Response.success({
-            message: "Your account has been created.",
+            message: i18n.t('response.register.success'),
             data: registerResponse,
         });
     }
@@ -47,14 +48,17 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @UseJwtGuard()
     async logout(
+        @I18n() i18n: I18nContext,
         @Req() req: Request,
-        @Body() data: RegisterDTO,
     ) {
-        // const registerResponse = await this.authService.logout();
-        console.log(req.user)
-        // return Response.success({
-        //     message: "Your account has been created.",
-        //     data: registerResponse,
-        // });
+        try {
+            await this.authService.logout(req.user);
+
+            return Response.success({
+                message: i18n.t('response.logout.success'),
+            });
+        } catch (error) {
+            
+        }
     }
 }
