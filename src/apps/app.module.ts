@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { FileModule } from './file/file.module';
 import { I18nModule, QueryResolver, HeaderResolver, AcceptLanguageResolver } from 'nestjs-i18n'
 import { join } from 'path';
+import { ConfigModule as AppConfigModule } from './config/config.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,7 +37,8 @@ import { join } from 'path';
       }
     }),
     AuthModule,
-    FileModule
+    FileModule,
+    AppConfigModule
   ],
   controllers: [AppController],
   providers: [AppService],
