@@ -22,7 +22,7 @@ services:
     volumes:
       - ./:/app
     networks:
-      - starter-kit-network
+      - network
     command:
       - /bin/sh
       - -c
@@ -31,7 +31,7 @@ services:
         yarn run start:dev
 
   pgsql:
-    container_name: "starter-kit-db"
+    container_name: "starter-kit-pgsql"
     image: postgres:15
     environment:
       POSTGRES_PASSWORD: ${DB_PASS}
@@ -40,19 +40,33 @@ services:
     ports:
       - ${DB_EXPOSED_PORT:-8611}:5432
     networks:
-      - starter-kit-network
+      - network
 
   redis:
     container_name: "starter-kit-redis"
     image: redis:7.0.5-alpine
     ports:
       - ${REDIS_EXPOSED_PORT:-8612}:6379
-    
     networks:
-      - starter-kit-network
-
+      - network
+  adminer:
+    container_name: "starter-kit-adminer"
+    image: adminer
+    depends_on: 
+      - pgsql
+    ports:
+      - ${ADMINER_EXPOSED_PORT:-8613}:8080
+    networks:
+      - network
+  smtp:
+    container_name: "starter-kit-smtp"
+    image: jcalonso/mailhog:latest
+    ports:
+     - ${MAILHOG_EXPOSED_PORT:-8614}:8025
+    networks:
+      - network
 networks:
-    starter-kit-network:
+    network:
         driver: bridge
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
