@@ -19,6 +19,8 @@ services:
       - ${APP_EXPOSED_PORT:-8610}:3000
     depends_on:
       - pgsql
+      - redis
+      - smtp
     volumes:
       - ./:/app
     networks:
