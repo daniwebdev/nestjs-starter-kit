@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { StorageService } from 'src/modules/storage/storage.service';
-import { Response } from 'src/utils';
+import { StorageService } from 'src/shared/storage/storage.service';
+import { Response } from 'src/common/utils';
 // import { Response } from 'src/utils/response';
 // import { storage } from 'src/utils/storage/storage';
 

@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { Response } from 'src/utils';
+import { Response } from 'src/common/utils';
 import { ConfigService } from './config.service';
 
 @Controller('config')

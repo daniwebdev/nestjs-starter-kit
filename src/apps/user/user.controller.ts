@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Query, Req } from '@nestjs/common';
 import { Request } from 'express';
-import { UseJwtGuard } from 'src/filters/jwt.guard';
-import { Response } from 'src/utils';
+import { UseJwtGuard } from 'src/common/filters/jwt.guard';
+import { Response } from 'src/common/utils';
 import { UpdateUserDTO } from './update-user.dto';
 import { UserService } from './user.service';
 

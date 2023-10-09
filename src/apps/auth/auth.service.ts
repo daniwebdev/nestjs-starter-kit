@@ -10,7 +10,7 @@ import { compare, hash } from 'bcrypt';
 import { Request } from 'express';
 import { UserDevice } from 'src/entities/user-device.entity';
 import { DeviceDTO } from './dto/device.dto';
-import { RedisService } from 'src/modules/redis/redis.service';
+import { RedisService } from 'src/shared/redis/redis.service';
 import { I18nService } from 'nestjs-i18n';
 
 @Injectable()

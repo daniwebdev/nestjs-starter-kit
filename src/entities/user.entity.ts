@@ -1,4 +1,4 @@
-import { strRandom } from 'src/utils';
+import { strRandom } from 'src/common/utils';
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, UpdateDateColumn, CreateDateColumn } from 'typeorm';
 import { v4 } from 'uuid'
 @Entity({

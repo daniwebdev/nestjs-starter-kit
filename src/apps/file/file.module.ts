@@ -3,7 +3,7 @@ import { FileService } from './file.service';
 import { FileController } from './file.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { memoryStorage } from 'multer';
-import { StorageModule } from 'src/modules/storage/storage.module';
+import { StorageModule } from 'src/shared/storage/storage.module';
 
 @Module({
   imports: [
