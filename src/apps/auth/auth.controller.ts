@@ -6,6 +6,7 @@ import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -14,6 +15,7 @@ export class AuthController {
         private authService: AuthService,
     ) {}
 
+    @ApiTags("Auth")
     @Post('/login')
     @HttpCode(HttpStatus.OK)
     async login(

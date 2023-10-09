@@ -21,7 +21,8 @@ WORKDIR /app
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=cache,target=/root/.yarn \
-    yarn install --production --frozen-lockfile
+    yarn install
+    # yarn install --production --frozen-lockfile
 
 # Run the application as a non-root user.
 USER node
@@ -33,5 +34,4 @@ COPY . .
 EXPOSE 8100
 
 # Run the application.
-CMD yarn run build
 CMD yarn run start:dev

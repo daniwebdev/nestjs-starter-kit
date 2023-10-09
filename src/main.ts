@@ -4,6 +4,7 @@ import { join } from 'path';
 import { ApiKeyGuard } from './apps/app.guard';
 import { AppModule } from './apps/app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 const APP_PORT = 3000;
 
@@ -20,9 +21,31 @@ async function bootstrap() {
 
   app.setViewEngine('ejs');
 
-  await app.listen(APP_PORT);
 
-  console.log('listening http://0.0.0.0:' + APP_PORT);
+
+  const config = new DocumentBuilder()
+    .setTitle('StarterKit Project')
+    .setDescription('This is nestjs starter kit, it\'s will help you when creating new project with nestjs.')
+    .setVersion('1.0')
+    .addTag('Auth', "All about authentication")
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
+
+  await app.listen(APP_PORT);
+  
+  console.log("--------------------------------------------------------");
+  
+  if(process.env.DB_EXPOSED_PORT != undefined) {
+    console.log(`Adminer Exposed on http://0.0.0.0:${process.env.ADMINER_EXPOSED_PORT}/?pgsql=${process.env.DB_HOST}&username=${process.env.DB_USER}&db=${process.env.DB_NAME}`);
+  }
+  
+  if(process.env.APP_EXPOSED_PORT != undefined) {
+    console.log(`App Exposed on http://0.0.0.0:${process.env.APP_EXPOSED_PORT}`);
+  }
+
+  console.log("--------------------------------------------------------");
+  
 }
 
 bootstrap();

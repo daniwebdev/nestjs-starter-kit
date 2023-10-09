@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -31,6 +31,7 @@
     "@nestjs/jwt": "^10.1.0",
     "@nestjs/passport": "^10.0.2",
     "@nestjs/platform-express": "^10.0.2",
+    "@nestjs/swagger": "^7.1.13",
     "@nestjs/typeorm": "^10.0.0",
     "@svtslv/nestjs-ioredis": "^1.0.2",
     "bcrypt": "^5.1.0",
@@ -50,7 +51,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@nestjs/cli": "^10.1.0",
+    "@nestjs/cli": "^10.1.18",
     "@nestjs/schematics": "^10.0.2",
     "@nestjs/testing": "^10.2.7",
     "@types/bcrypt": "^5.0.0",
