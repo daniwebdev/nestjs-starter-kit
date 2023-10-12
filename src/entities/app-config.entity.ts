@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
-    name: "setting_apps"
+    name: "app_configs"
 })
 export class AppConfig {
 

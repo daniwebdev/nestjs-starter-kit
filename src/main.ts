@@ -27,6 +27,12 @@ async function bootstrap() {
     .setTitle('StarterKit Project')
     .setDescription('This is nestjs starter kit, it\'s will help you when creating new project with nestjs.')
     .setVersion('1.0')
+    .addSecurity('api-key', {
+      type: 'apiKey',
+      in: 'header',
+      name: 'x-api-key'
+    })
+    .addBearerAuth()
     .addTag('Auth', "All about authentication")
     .build();
   const document = SwaggerModule.createDocument(app, config);

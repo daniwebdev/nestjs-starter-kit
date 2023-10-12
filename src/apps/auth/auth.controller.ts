@@ -6,18 +6,20 @@ import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiHeader, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags("Auth")
+@ApiSecurity('api-key')
 export class AuthController {
 
     constructor(
         private authService: AuthService,
     ) {}
 
-    @ApiTags("Auth")
     @Post('/login')
     @HttpCode(HttpStatus.OK)
+    @ApiBody({type: LoginDTO})
     async login(
         @I18n() i18n: I18nContext,
         @Req() req: Request,

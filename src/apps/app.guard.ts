@@ -34,6 +34,7 @@ export class ApiKeyGuard implements CanActivate {
 
     const key = req.headers['x-api-key'] ?? req.query.api_key
 
+    console.log(req.headers);
     if(key == undefined || key == '') {
       throw new HttpException('X-API-KEY is not provided.', HttpStatus.UNAUTHORIZED);
     }
