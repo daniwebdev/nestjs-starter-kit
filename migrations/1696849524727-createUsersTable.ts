@@ -44,22 +44,22 @@ export class CreateUsersTable1696849524727 implements MigrationInterface {
                 },
                 {
                     name: "email_verified_at",
-                    type: "datetime",
+                    type: "timestamp",
                     isNullable: true,
                 },
                 {
                     name: "phone_verified_at",
-                    type: "datetime",
+                    type: "timestamp",
                     isNullable: true,
                 },
                 {
                     name: "created_at",
-                    type: "datetime",
+                    type: "timestamp",
                     default: "now()",
                 },
                 {
                     name: "updated_at",
-                    type: "datetime",
+                    type: "timestamp",
                     default: "now()",
                 }
             ],

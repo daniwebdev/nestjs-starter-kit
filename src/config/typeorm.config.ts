@@ -1,5 +1,7 @@
 import { TypeOrmModuleAsyncOptions, TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { join } from "path";
+import { DataSource, DataSourceOptions } from "typeorm";
+
 export const defaultTypeOrmConfig: TypeOrmModuleAsyncOptions = {
     useFactory: () => {
         return {
@@ -14,10 +16,11 @@ export const defaultTypeOrmConfig: TypeOrmModuleAsyncOptions = {
                 join(__dirname, '..', '**', '*.entity{.ts,.js}')
             ],
             synchronize: false,
+            migrationsTableName: "migrations",
             poolSize: 10,
             poolErrorHandler: (err) => {
                 console.log('db pooling error:', err)
             }
-        }
+        };
     }
 }

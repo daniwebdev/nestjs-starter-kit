@@ -30,7 +30,7 @@ async function bootstrap() {
     .addTag('Auth', "All about authentication")
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(APP_PORT);
   
@@ -42,6 +42,7 @@ async function bootstrap() {
   
   if(process.env.APP_EXPOSED_PORT != undefined) {
     console.log(`App Exposed on http://0.0.0.0:${process.env.APP_EXPOSED_PORT}`);
+    console.log(`Swagger Exposed on http://0.0.0.0:${process.env.APP_EXPOSED_PORT}/docs`);
   }
 
   console.log("--------------------------------------------------------");

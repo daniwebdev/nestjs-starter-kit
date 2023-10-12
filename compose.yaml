@@ -7,10 +7,11 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
-name: ${PROJECT_NAME}
+name: starter-kit
 services:
   app:
     container_name: "starter-kit-app"
+    image: starter-kit/backend:latest
     build:
       context: .
     environment:
@@ -31,7 +32,6 @@ services:
       - -c
       - |
         yarn install
-        yarn run build
         yarn run start:dev
 
   pgsql:
@@ -45,6 +45,17 @@ services:
       - ${DB_EXPOSED_PORT:-8611}:5432
     networks:
       - network
+    healthcheck:
+        test:
+            - CMD
+            - pg_isready
+            - '-q'
+            - '-d'
+            - 'db-starter-kit'
+            - '-U'
+            - '${DB_USER}'
+        retries: 3
+        timeout: 5s
 
   redis:
     container_name: "starter-kit-redis"
