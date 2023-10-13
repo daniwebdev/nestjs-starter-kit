@@ -9,7 +9,7 @@ export class AppConfig {
     id: number;
 
     @Column()
-    name: string;
+    key: string;
 
     @Column()
     value: string;

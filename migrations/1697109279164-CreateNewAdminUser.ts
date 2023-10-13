@@ -1,5 +1,4 @@
 import { hash } from 'bcrypt';
-import { getRandomValues } from 'crypto';
 import { MigrationInterface, QueryRunner } from "typeorm"
 import { v4 } from 'uuid';
 

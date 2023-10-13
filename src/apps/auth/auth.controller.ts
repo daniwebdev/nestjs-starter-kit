@@ -6,7 +6,7 @@ import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
 import { RegisterDTO } from './dto/register.dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
-import { ApiBody, ApiHeader, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiHeader, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags("Auth")
@@ -34,6 +34,7 @@ export class AuthController {
     }
 
     @UseJwtRefreshGuard()
+    @ApiBearerAuth()
     @Post('/refresh')
     @HttpCode(HttpStatus.OK)
     async refresh(
@@ -50,6 +51,7 @@ export class AuthController {
     }
 
     @Post('/register')
+    @ApiBearerAuth('RefreshToken')
     @HttpCode(HttpStatus.CREATED)
     @ApiBody({type: () => RegisterDTO})
     async register(

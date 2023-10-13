@@ -32,7 +32,8 @@ async function bootstrap() {
       in: 'header',
       name: 'x-api-key'
     })
-    .addBearerAuth()
+    .addBearerAuth({name: "AuthorizationToken", type: "http"})
+    .addBearerAuth({name: "RefreshToken", type: "http"})
     .addTag('Auth', "All about authentication")
     .build();
   const document = SwaggerModule.createDocument(app, config);
