@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
-import { UseJwtGuard, UseJwtRefreshGuard } from 'src/common/filters/jwt.guard';
+import { UseJwtGuard, UseJwtRefreshGuard } from 'src/common/guards/jwt.guard';
 import { Response } from 'src/common/utils/response.utils';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';

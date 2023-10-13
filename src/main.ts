@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
-import { ApiKeyGuard } from './apps/app.guard';
+import { ApiKeyGuard } from './common/filters/app.guard';
 import { AppModule } from './apps/app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
