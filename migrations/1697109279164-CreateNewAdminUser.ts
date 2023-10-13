@@ -1,4 +1,5 @@
 import { hash } from 'bcrypt';
+import { getRandomValues } from 'crypto';
 import { MigrationInterface, QueryRunner } from "typeorm"
 import { v4 } from 'uuid';
 
@@ -15,6 +16,7 @@ export class CreateNewAdminUser1697109279164 implements MigrationInterface {
 
         const query = queryRunner.manager.createQueryBuilder();
         await query.insert().into('users').values([{
+            "code": "ABCDEF",
             "uuid": v4(),
             "username": "admin",
             "name": "Admin",

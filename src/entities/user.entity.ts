@@ -15,12 +15,7 @@ export class User {
   @Column({
     nullable: true,
   })
-  referral_code: string;
-
-  @Column({
-    nullable: true,
-  })
-  referral_link: string;
+  referral: string;
 
   @Column()
   uuid: string;

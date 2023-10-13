@@ -29,7 +29,8 @@ export const mailerConfigAsync: MailerAsyncOptions = {
                 from: process.env.MAIL_FROM_DEFAULT,
             },
             template: {
-                dir: __dirname + '/../utils/send-email/templates',
+                //src/shared/send-email/templates
+                dir: __dirname + '/../shared/send-email/templates',
                 adapter: new EjsAdapter(),
                 options: {
                     // strict: true, // locals.contextData

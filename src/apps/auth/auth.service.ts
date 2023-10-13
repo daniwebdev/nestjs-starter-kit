@@ -12,6 +12,7 @@ import { UserDevice } from 'src/entities/user-device.entity';
 import { DeviceDTO } from './dto/device.dto';
 import { RedisService } from 'src/shared/redis/redis.service';
 import { I18nService } from 'nestjs-i18n';
+import { SendEmailService } from 'src/shared/send-email/send-email.service';
 
 @Injectable()
 export class AuthService {
@@ -25,6 +26,7 @@ export class AuthService {
         private readonly redisService: RedisService,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
+        private readonly sendEmailService: SendEmailService<User>,
     ) {}
 
     async logout(userAuth: UserInAuth) {
@@ -178,6 +180,12 @@ export class AuthService {
                 access_token: await this.makeHash(tokens.access_token),
                 refresh_token: await this.makeHash(tokens.refresh_token),
                 status: 'allowed',
+                current_login: {
+                    ip: req.ip,
+                    app_version: req.header('x-app-version'),
+                    timestamp: new Date().getTime(),
+                    coordinate,
+                },
                 last_login: {
                     ip: req.ip,
                     app_version: req.header('x-app-version'),
@@ -192,6 +200,9 @@ export class AuthService {
             const getUser = await this.getUser({
                 id: newUser.id,
             }, manager)
+
+            await this.sendEmailService.welcomeRegisterEmail(newUser.email, newUser)
+
 
             // Return any additional information you may want to provide after successful registration
             // For example, you can return the newly created user entity with sensitive information (like password) removed.

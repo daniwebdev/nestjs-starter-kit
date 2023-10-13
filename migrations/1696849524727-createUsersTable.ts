@@ -7,6 +7,8 @@ export class CreateUsersTable1696849524727 implements MigrationInterface {
             name: 'users',
             columns: [
                 {name: "id",type: "int",isPrimary: true,isGenerated: true},
+                {name: "code",type: "varchar",isNullable: false},
+                {name: "referral",type: "varchar",isNullable: true},
                 {name: "uuid",type: "varchar",isUnique: true},
                 {name: "name", type: "varchar"},
                 {name: "username",type: "varchar",isUnique: true},

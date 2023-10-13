@@ -51,6 +51,7 @@ export class AuthController {
 
     @Post('/register')
     @HttpCode(HttpStatus.CREATED)
+    @ApiBody({type: () => RegisterDTO})
     async register(
         @I18n() i18n: I18nContext,
         @Req() req: Request,

@@ -25,8 +25,7 @@ export class UserService {
             select: {
                 id: true,
                 code: true,
-                referral_code: true,
-                referral_link: true,
+                referral: true,
                 uuid: true,
                 username: true,
                 name: true,

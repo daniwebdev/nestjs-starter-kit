@@ -6,11 +6,13 @@ import { User } from 'src/entities/user.entity';
 import { UserDevice } from 'src/entities/user-device.entity';
 import { AccessTokenStrategy, RefreshTokenStrategy } from './strategies';
 import { RedisModule } from 'src/shared/redis/redis.module';
+import { SendEmailModule } from 'src/shared/send-email/send-email.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, UserDevice]),
     RedisModule,
+    SendEmailModule
   ],
   providers: [AuthService, AccessTokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController]
