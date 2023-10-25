@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { IBaseService } from "./base-service.interface";
 import { InjectRepository } from "@nestjs/typeorm";
 
-export abstract class BaseCrudService<A,B> implements IBaseService<A, B> {
+export abstract class BaseCrudService<A,B> implements IBaseService {
     constructor(  
       public roleRepository: Repository<any>
     ) {}

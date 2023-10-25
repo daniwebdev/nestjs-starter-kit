@@ -40,6 +40,8 @@ async function bootstrap() {
     .addBearerAuth({name: "RefreshToken", type: "http"})
     .addTag('Auth', "All about authentication")
     .addTag('Admin > Users', "User CRUD")
+    .addTag('Admin > Permissions', "Permissions CRUD")
+    .addTag('Admin > Roles', "Roles CRUD")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

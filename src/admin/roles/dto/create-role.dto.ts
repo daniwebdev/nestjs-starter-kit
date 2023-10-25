@@ -1,9 +1,9 @@
-import { ApiProperty } from "@nestjsx/crud/lib/crud";
-import { Exclude } from "class-transformer";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsString } from "class-validator";
 
 export class CreateRoleDto {
-
     @ApiProperty({example: 'Admin'})
+    @IsString()
     name: string;
     
     @ApiProperty({example: 'ADMIN'})

@@ -36,8 +36,6 @@
     "@nestjs/platform-express": "^10.0.2",
     "@nestjs/swagger": "^7.1.13",
     "@nestjs/typeorm": "^10.0.0",
-    "@nestjsx/crud": "^5.0.0-alpha.3",
-    "@nestjsx/crud-typeorm": "^5.0.0-alpha.3",
     "@svtslv/nestjs-ioredis": "^1.0.2",
     "bcrypt": "^5.1.0",
     "cache-manager-redis-store": "^3.0.1",

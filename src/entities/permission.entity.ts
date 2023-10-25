@@ -14,7 +14,7 @@ export class Permission {
     path: string;
 
     @Column({ type: "varchar", nullable: true })
-    description: string;
+    action: string;
 
     @OneToMany(type => RoleToPermission, roleToPermission => roleToPermission.permission)
     roles: RoleToPermission[];

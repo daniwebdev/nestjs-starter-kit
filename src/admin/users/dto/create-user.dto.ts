@@ -1,4 +1,5 @@
-import { ApiProperty } from "@nestjsx/crud/lib/crud";
+
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsEmail, MinLength, Matches, IsNotEmpty } from 'class-validator';
 import { Match } from "src/common/decorators/validation.decorator";
 
