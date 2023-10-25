@@ -8,7 +8,6 @@ import { IBaseService } from 'src/i18n/base-crud/base-service.interface';
 import { BaseCrudService } from 'src/i18n/base-crud/base-crud.service';
 
 @Injectable()
-// export class RolesService implements IBaseService<CreateRoleDto, UpdateRoleDto> {
 export class RolesService extends BaseCrudService<CreateRoleDto, UpdateRoleDto> implements IBaseService<CreateRoleDto, UpdateRoleDto> {
   constructor(
     @InjectRepository(Role) 
