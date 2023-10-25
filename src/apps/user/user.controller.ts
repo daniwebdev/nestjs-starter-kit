@@ -4,6 +4,7 @@ import { UseJwtGuard } from 'src/common/guards/jwt.guard';
 import { Response } from 'src/common/utils';
 import { UpdateUserDTO } from './update-user.dto';
 import { UserService } from './user.service';
+import { ApiNotAcceptableResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('user')
 @UseJwtGuard()

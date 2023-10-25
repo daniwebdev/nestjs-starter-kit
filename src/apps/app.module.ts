@@ -10,6 +10,9 @@ import { FileModule } from './file/file.module';
 import { I18nModule, QueryResolver, HeaderResolver, AcceptLanguageResolver } from 'nestjs-i18n'
 import { join } from 'path';
 import { ConfigModule as AppConfigModule } from './config/config.module';
+import { UsersModule } from 'src/admin/users/users.module';
+import { AdminModule } from 'src/admin/admin.module';
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,7 +41,8 @@ import { ConfigModule as AppConfigModule } from './config/config.module';
     }),
     AuthModule,
     FileModule,
-    AppConfigModule
+    AppConfigModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [AppService],

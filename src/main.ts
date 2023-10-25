@@ -5,6 +5,7 @@ import { ApiKeyGuard } from './common/guards/api-key.guard';
 import { AppModule } from './apps/app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ValidationPipe } from '@nestjs/common';
 
 const APP_PORT = 3000;
 
@@ -18,6 +19,9 @@ async function bootstrap() {
 
   app.useGlobalGuards(new ApiKeyGuard());
   app.useGlobalFilters(new HttpExceptionFilter())
+
+  app.useGlobalPipes(new ValidationPipe());
+
 
   app.setViewEngine('ejs');
 
@@ -35,6 +39,7 @@ async function bootstrap() {
     .addBearerAuth({name: "AuthorizationToken", type: "http"})
     .addBearerAuth({name: "RefreshToken", type: "http"})
     .addTag('Auth', "All about authentication")
+    .addTag('Admin > Users', "User CRUD")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
