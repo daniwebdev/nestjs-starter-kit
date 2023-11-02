@@ -9,7 +9,8 @@ export class ApiKeyGuard implements CanActivate {
 
   private excluded = [
     /^\/$/,
-    /^\/webhook(.*)$/
+    /^\/webhook(.*)$/,
+    /^\/misc(.*)$/,
   ];
   
   canActivate(
@@ -25,6 +26,7 @@ export class ApiKeyGuard implements CanActivate {
 
     /* catch x-api-key from header and verify with the env */
     const key = req.headers['x-api-key'] ?? req.query.api_key
+    console.log(key)
     if(key == undefined || key == '') {
       throw new HttpException('X-API-KEY is not provided.', HttpStatus.UNAUTHORIZED);
     }

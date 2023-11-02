@@ -13,13 +13,29 @@ export class RolesController extends BaseCrudController<CreateRoleDto, UpdateRol
     super(service);
   }
 
-  @Post()
-  create(createDTO: CreateRoleDto) {
-    return this.create(createDTO);
+  // @Post()
+  // create(createDTO: CreateRoleDto) {
+  //   return this.create(createDTO);
+  // }
+
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateDTO: UpdateRoleDto) {
+  //   return this.service.update(+id, updateDTO);
+  // }
+
+  @Patch(':id/assign')
+  async assignPermisssion(@Body('ids') permissionIds: string[], @Param('id') id: string) {
+    
+    await this.service.assignPermission(+id, permissionIds);
+
+    return {
+      status: true,
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDTO: UpdateRoleDto) {
-    return this.service.update(+id, updateDTO);
+  @Get(':id/permissions')
+  async getPermisssion(@Param('id') id: string) {
+    
+    return await this.service.getPermission(+id);
   }
 }

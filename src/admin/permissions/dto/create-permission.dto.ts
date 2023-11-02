@@ -9,5 +9,5 @@ export class CreatePermissionDto {
     path: string;
 
     @ApiProperty()
-    action: string;
+    actions: string[];
 }

@@ -14,13 +14,13 @@ export class PermissionsController extends BaseCrudController<CreatePermissionDt
     super(permissionsService);
   }
 
-  @Post()
-  create(createDTO: CreatePermissionDto) {
-    return this.create(createDTO);
-  }
+  // @Post()
+  // create(createDTO: CreatePermissionDto) {
+  //   return this.create(createDTO);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDTO: UpdatePermissionDto) {
-    return this.service.update(+id, updateDTO);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateDTO: UpdatePermissionDto) {
+  //   return this.service.update(+id, updateDTO);
+  // }
 }

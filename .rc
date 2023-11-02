@@ -1,3 +1,0 @@
-alias dyarn="docker compose exec app yarn"
-alias dreset="docker compose restart app"
-alias dlog="docker compose logs app -f"

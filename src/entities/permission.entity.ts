@@ -13,8 +13,8 @@ export class Permission {
     @Column({ type: "varchar", nullable: true })
     path: string;
 
-    @Column({ type: "varchar", nullable: true })
-    action: string;
+    @Column({ type: "json", nullable: true })
+    actions: string[];
 
     @OneToMany(type => RoleToPermission, roleToPermission => roleToPermission.permission)
     roles: RoleToPermission[];
