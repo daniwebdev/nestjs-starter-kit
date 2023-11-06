@@ -32,7 +32,11 @@ export class MiscService {
         permissions.forEach((item: RoleToPermission) => {
             console.log(item.permission);
             let actions = item.permission.actions.map((x: string) => `(${x})`).join('|');
-            buildPermissionCasbin += `p, ${user.role.key}, ${item.permission.path}, ${actions}${"\n"}`
+            if(actions == '') {
+                buildPermissionCasbin += `p, ${user.role.key}, ${item.permission.path}${"\n"}`
+            } else {
+                buildPermissionCasbin += `p, ${user.role.key}, ${item.permission.path}, ${actions}${"\n"}`
+            }
         })
 
         console.log(buildPermissionCasbin.trim());
