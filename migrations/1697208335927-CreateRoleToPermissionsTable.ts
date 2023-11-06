@@ -15,6 +15,20 @@ export class CreateRoleToPermissionsTable1697208335927 implements MigrationInter
             indices: [
                 { columnNames: ['role_id'] },
                 { columnNames: ['role_id', 'permission_id'] },
+            ],
+            foreignKeys: [
+                {
+                    columnNames: ['role_id'],
+                    referencedColumnNames: ['id'],
+                    referencedTableName: 'roles',
+                    onDelete: 'CASCADE',
+                },
+                {
+                    columnNames: ['permission_id'],
+                    referencedColumnNames: ['id'],
+                    referencedTableName: 'permissions',
+                    onDelete: 'CASCADE',
+                }
             ]
         }))
     }
