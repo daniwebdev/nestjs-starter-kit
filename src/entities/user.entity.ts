@@ -1,6 +1,7 @@
 import { strRandom } from 'src/common/utils';
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, UpdateDateColumn, CreateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, UpdateDateColumn, CreateDateColumn, OneToOne, JoinColumn } from 'typeorm';
 import { v4 } from 'uuid'
+import { Role } from './role.entity';
 @Entity({
     name: 'users'
 })
@@ -25,6 +26,9 @@ export class User {
 
   @Column()
   name: string;
+
+  @Column()
+  role_id: string;
 
   @Column()
   avatar: string;
@@ -53,6 +57,10 @@ export class User {
   
   @CreateDateColumn()
   created_at: Date
+
+  @OneToOne(type => Role)
+  @JoinColumn({ name: "role_id" })
+  role: Role;
 
   @BeforeInsert()
   beforeInsert() {
