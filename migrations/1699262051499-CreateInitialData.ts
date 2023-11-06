@@ -25,7 +25,7 @@ export class CreateInitialData1699262051499 implements MigrationInterface {
             {
                 name: "User {*}",
                 path: "users/*",
-                actions: `["update", "show", "delete"]`,
+                actions: `["update", "show", "delete", "edit"]`,
             },
             {
                 name: "access_control",
@@ -40,7 +40,7 @@ export class CreateInitialData1699262051499 implements MigrationInterface {
             {
                 name: "Roles {*}",
                 path: "roles/*",
-                actions: `["update", "show", "delete"]`,
+                actions: `["update", "show", "delete", "edit"]`,
             },
             {
                 name: "Permissions",
@@ -50,7 +50,7 @@ export class CreateInitialData1699262051499 implements MigrationInterface {
             {
                 name: "Permissions",
                 path: "permissions/*",
-                actions: `["update", "show", "delete"]`,
+                actions: `["update", "show", "delete", "edit"]`,
             },
         ]).execute()
 
